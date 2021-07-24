@@ -75,6 +75,25 @@ class Solution(object):
                 count += 1
         return count
 
+    def merge(self, nums1, m, nums2, n):
+        """
+        :type nums1: List[int]
+        :type m: int
+        :type nums2: List[int]
+        :type n: int
+        :rtype: None Do not return anything, modify nums1 in-place instead.
+        """
+        while m > 0 and n > 0:
+            if nums1[m - 1] > nums2[n - 1]:
+                nums1[m + n - 1] = nums1[m - 1]
+                m -= 1
+            else:
+                nums1[m + n - 1] = nums2[n - 1]
+                n -= 1
+        nums1[:n] = nums2[:n]
+
+        return nums1
+
 
 class ListNode(object):
     def __init__(self, val=0, next=None):
@@ -87,7 +106,10 @@ class ListNode(object):
 
 if __name__ == '__main__':
     sol = Solution()
-
-    res = sol.hammingWeight(0b0000000000000000000000000001011)
+    nums1 = [1, 2, 3, 0, 0, 0]
+    m = 3
+    nums2 = [2, 5, 6]
+    n = 3
+    res = sol.merge(nums1, m, nums2, n)
     print(res)
     pass
