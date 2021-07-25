@@ -1,4 +1,6 @@
 # Leet Code Practice
+import collections
+
 
 class Solution(object):
 
@@ -94,6 +96,92 @@ class Solution(object):
 
         return nums1
 
+    def threeSum(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+
+        Input: nums = [-1,0,1,2,-1,-4]
+        Output: [[-1,-1,2],[-1,0,1]]
+        """
+
+        res = set()
+
+        n, p, z = [], [], []
+        for num in nums:
+            if num > 0:
+                p.append(num)
+            elif num < 0:
+                n.append(num)
+            else:
+                z.append(num)
+
+        N, P = set(n), set(p)
+
+        if z:
+            for num in P:
+                if -1 * num in N:
+                    res.add((-1 * num, 0, num))
+
+        if len(z) >= 3:
+            res.add((0, 0, 0))
+
+        for i in range(len(n)):
+            for j in range(i + 1, len(n)):
+                target = -1 * (n[i] + n[j])
+                if target in P:
+                    res.add(tuple(sorted([n[i], n[j], target])))
+
+        for i in range(len(p)):
+            for j in range(i + 1, len(p)):
+                target = -1 * (p[i] + p[j])
+                if target in N:
+                    res.add(tuple(sorted([p[i], p[j], target])))
+
+        return res
+
+    def threeSumClosest(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        nums = [-1, 2, 1, -4]
+        target = 1
+        The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+        """
+        nums.sort()
+        result = nums[0] + nums[1] + nums[2]
+        for i in range(len(nums) - 2):
+            j, k = i + 1, len(nums) - 1
+            while j < k:
+                sum = nums[i] + nums[j] + nums[k]
+                if sum == target:
+                    return sum
+
+                if abs(sum - target) < abs(result - target):
+                    result = sum
+
+                if sum < target:
+                    j += 1
+                elif sum > target:
+                    k -= 1
+
+        return result
+
+    def letterCombinations(self, digits):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
+        if not digits: return []
+        digit_map = {'2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno',
+                     '7': 'pqrs', '8': 'tuv', '9': 'wxyz'}
+        result = ['']
+        for idx in range(len(digits)):
+            result = [prev + l for prev in result for l in digit_map[digits[idx]]]
+        return result
+
+
 
 class ListNode(object):
     def __init__(self, val=0, next=None):
@@ -106,10 +194,7 @@ class ListNode(object):
 
 if __name__ == '__main__':
     sol = Solution()
-    nums1 = [1, 2, 3, 0, 0, 0]
-    m = 3
-    nums2 = [2, 5, 6]
-    n = 3
-    res = sol.merge(nums1, m, nums2, n)
+    dig = "233"
+    res = sol.letterCombinations(dig)
     print(res)
     pass
