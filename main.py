@@ -181,6 +181,25 @@ class Solution(object):
             result = [prev + l for prev in result for l in digit_map[digits[idx]]]
         return result
 
+    def findPoisonedDuration(self, timeSeries, duration):
+        """
+        :type timeSeries: List[int]
+        :type duration: int
+        :rtype: int
+        """
+        prev = timeSeries[0]
+        poison = duration
+
+        for i in range(1, len(timeSeries)):
+
+            if prev + duration >= timeSeries[i]:
+                overlap = prev + duration - timeSeries[i]
+                poison += duration - overlap
+            else:
+                poison += duration
+
+            prev = timeSeries[i]
+        return poison
 
 
 class ListNode(object):
@@ -194,7 +213,8 @@ class ListNode(object):
 
 if __name__ == '__main__':
     sol = Solution()
-    dig = "233"
-    res = sol.letterCombinations(dig)
+    timeSeries = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    duration = 10000
+    res = sol.findPoisonedDuration(timeSeries, duration)
     print(res)
     pass
