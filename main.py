@@ -1,6 +1,8 @@
 # Leet Code Practice
 import collections
 
+from constraint import xrange
+
 
 class Solution(object):
 
@@ -201,6 +203,60 @@ class Solution(object):
             prev = timeSeries[i]
         return poison
 
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: ListNode
+        :type n: int
+        :rtype: ListNode
+
+        0 1 2 3 4
+        n = 3
+        length = 5
+        0 1 3 4
+        node[2]next = node[2].next.next
+        """
+        fast = slow = head
+        for i in xrange(n):
+            fast = fast.next
+        if fast == None: return head.next
+        while fast.next:
+            fast = fast.next
+            slow = slow.next
+        slow.next = slow.next.next
+        return head
+
+    def mergeTwoLists(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        if l2 is None and l1 is None:
+            return None
+
+        merged = ListNode()
+        merge_copy = merged
+        while l2 is not None or l1 is not None:
+
+            if l2 is None:
+                merged.val = l1.val
+                l1 = l1.next
+            elif l1 is None:
+                merged.val = l2.val
+                l2 = l2.next
+            elif l2.val <= l1.val:
+                merged.val = l2.val
+                l2 = l2.next
+            else:
+                merged.val = l1.val
+                l1 = l1.next
+
+            if l2 is not None or l1 is not None:
+                merged.next = ListNode()
+                merged = merged.next
+
+        return merge_copy
+
 
 class ListNode(object):
     def __init__(self, val=0, next=None):
@@ -213,8 +269,8 @@ class ListNode(object):
 
 if __name__ == '__main__':
     sol = Solution()
-    timeSeries = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    duration = 10000
-    res = sol.findPoisonedDuration(timeSeries, duration)
+    l1 = ListNode(1, ListNode(2))
+    l2 = ListNode(1, ListNode(2))
+    res = sol.mergeTwoLists(l1, l2)
     print(res)
     pass
